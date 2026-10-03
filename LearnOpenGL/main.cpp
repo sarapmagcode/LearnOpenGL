@@ -108,21 +108,22 @@ int main()
 	// ------------
 
 	float vertices[] = {
-		// First triangle
 		0.5f, 0.5f, 0.0f, // top-right
-		0.5f, -0.5f, 0.0f, // bottom-right
-		-0.5f,  0.5f, 0.0f,  // top-left
-
-		// Second triangle
 		0.5f, -0.5f, 0.0f, // bottom-right
 		-0.5f, -0.5f, 0.0f, // bottom-left
 		-0.5f, 0.5f, 0.0f // top-left
 	};
 
-	// Create VBO and VAO
-	unsigned int VBO, VAO;
+	unsigned int indices[] = { // Note: Start from 0
+		0, 1, 3, // First triangle
+		1, 2, 3 // Second triangle
+	};
+
+	// Create VBO, VAO, and EBO
+	unsigned int VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO); // It's a buffer just like a VBO
 
 	// VAO - I don't quite understand this yet but it seems to save the state of VBO
 	glBindVertexArray(VAO);
@@ -131,12 +132,18 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	// EBO - copy indices[] to GPU for OpenGL to use
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 	// Specifies what part of our input data (float vertices[]) goes to which vertex 
 	// attribute (the one with 'in' keyword) for the vertex shader
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	// Optional: Unbind VBO and VAO
+	// BUT, make sure you don't unbind the element array buffer before unbinding your VAO,
+	// otherwise, it doesn't have an EBO configured.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
@@ -151,8 +158,7 @@ int main()
 
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO); // Bind VAO
-
-		glDrawArrays(GL_TRIANGLES, 0, 6); // Last argument = how many vertices we want to draw
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window); // Double-buffer technique
 		glfwPollEvents(); // Checks if any events are triggered
