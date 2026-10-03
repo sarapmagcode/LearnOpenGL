@@ -107,55 +107,40 @@ int main()
 	// VERTEX INPUT
 	// ------------
 
-	// 1st Triangle
-	float vertices1[] = {
+	float firstTriangle[] = {
 		-0.9f, -0.5f, 0.0f, // left  
 		0.0f, -0.5f, 0.0f, // right 
 		-0.45f,  0.5f, 0.0f, // top
 	};
 
-	// Create VBO and VAO
-	unsigned int VBO1, VAO1;
-	glGenVertexArrays(1, &VAO1);
-	glGenBuffers(1, &VBO1);
-
-	// VAO - I don't quite understand this yet but it seems to save the state of VBO
-	glBindVertexArray(VAO1);
-	
-	// VBO - copy float vertices[] data from CPU (RAM) to GPU (VRAM)
-	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
-
-	// Specifies what part of our input data (float vertices[]) goes to which vertex 
-	// attribute (the one with 'in' keyword) for the vertex shader
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	// Optional: Unbind VBO and VAO
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	// 2nd Triangle
-	float vertices2[] = {
+	float secondTriangle[] = {
 		0.0f, -0.5f, 0.0f, // left
 		0.9f, -0.5f, 0.0f, // right
 		0.45f, 0.5f, 0.0f, // top
 	};
 
-	unsigned int VBO2, VAO2;
-	glGenVertexArrays(1, &VAO2);
-	glGenBuffers(1, &VBO2);
+	// Create VBOs and VAOs
+	unsigned int VBOs[2], VAOs[2];
+	glGenVertexArrays(2, VAOs); // Generate multiple VAOs and VBOs at the same time
+	glGenBuffers(2, VBOs);
 
-	glBindVertexArray(VAO2);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-
+	// First triangle setup
+	// --------------------
+	glBindVertexArray(VAOs[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(firstTriangle), firstTriangle, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	// Note: No need to unbind since we directly bind a different VAO
+
+	// Second triangle setup
+	// ---------------------
+	glBindVertexArray(VAOs[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(secondTriangle), secondTriangle, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); // 0 stride = since it's tightly packed, we can let OpenGL figure it out
+	glEnableVertexAttribArray(0);
 
 	// Render loop (each iteration is a frame)
 	while (!glfwWindowShouldClose(window))
@@ -168,10 +153,12 @@ int main()
 
 		glUseProgram(shaderProgram);
 
-		glBindVertexArray(VAO1);
+		// First triangle
+		glBindVertexArray(VAOs[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		glBindVertexArray(VAO2);
+		// Second triangle
+		glBindVertexArray(VAOs[1]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glfwSwapBuffers(window); // Double-buffer technique
@@ -179,8 +166,8 @@ int main()
 	}
 
 	// Optional: De-allocate all resources
-	glDeleteVertexArrays(1, &VAO1);
-	glDeleteBuffers(1, &VBO1);
+	glDeleteVertexArrays(2, VAOs);
+	glDeleteBuffers(2, VBOs);
 	glDeleteProgram(shaderProgram);
 
 	glfwTerminate();
