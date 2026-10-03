@@ -8,6 +8,13 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+const char* vertexShaderSource = "#version 330 core\n" // '330' means OpenGL version 3.3 (if we're using 4.2, then it would become '420' instead)
+	"layout (location = 0) in vec3 aPos;\n"
+	"void main()\n"
+	"{\n"
+	"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+	"}\0";
+
 int main()
 {
 	// Configure GLFW
@@ -37,6 +44,27 @@ int main()
 	{
 		std::cout << "Failed to initialized GLAD" << std::endl;
 		return -1;
+	}
+
+	// GRAPHICS PIPELINE
+	// -----------------
+	// Shaders - small programs running on the GPU.
+	// Note: There are only specific shaders that are programmable by us (like these below, but not all).
+
+	// 1. Vertex Shader
+	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	glCompileShader(vertexShader);
+
+	// Compile our shader source to check for errors
+	int success;
+	char infoLog[512];
+	
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
 	// Render loop (each iteration is a frame)
