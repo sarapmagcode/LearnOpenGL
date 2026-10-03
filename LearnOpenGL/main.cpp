@@ -104,6 +104,36 @@ int main()
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
+	// VERTEX INPUT
+	// ------------
+
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f, // left  
+		0.5f, -0.5f, 0.0f, // right 
+		0.0f,  0.5f, 0.0f  // top   
+	};
+
+	// Create VBO and VAO
+	unsigned int VBO, VAO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+
+	// VAO - I don't quite understand this yet but it seems to save the state of VBO
+	glBindVertexArray(VAO);
+	
+	// VBO - copy float vertices[] data from CPU (RAM) to GPU (VRAM)
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Specifies what part of our input data (float vertices[]) goes to which vertex 
+	// attribute (the one with 'in' keyword) for the vertex shader
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// Optional: Unbind VBO and VAO
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
 	// Render loop (each iteration is a frame)
 	while (!glfwWindowShouldClose(window))
 	{
@@ -113,9 +143,20 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		glUseProgram(shaderProgram);
+		glBindVertexArray(VAO); // Bind VAO
+
+		// Draw Triangle
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
 		glfwSwapBuffers(window); // Double-buffer technique
 		glfwPollEvents(); // Checks if any events are triggered
 	}
+
+	// Optional: De-allocate all resources
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteProgram(shaderProgram);
 
 	glfwTerminate();
 	return 0;
