@@ -11,3 +11,9 @@ Recently, I've been watching [cakez](https://www.twitch.tv/cakez77)' on Twitch a
 Hopefully, one day, I could also make a game like he did and a lot of people would play it :))
 
 Currently, I'm studying the tutorial here in <https://learnopengl.com/>.
+
+## First Triangle
+
+So much code and graphics concept for a single triangle on the screeen :))
+
+![the most awaited triangle](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/the-most-awaited-triangle.png)
