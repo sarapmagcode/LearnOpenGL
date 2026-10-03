@@ -17,3 +17,7 @@ Currently, I'm studying the tutorial here in <https://learnopengl.com/>.
 So much code and graphics concept for a single triangle on the screeen :))
 
 ![the most awaited triangle](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/the-most-awaited-triangle.png)
+
+## Two Triangles (Exercise)
+
+![Two triangles](https://github.com/sarapmagcode/LearnOpenGL/blob/hello-triangle-exercise-1-draw-2-triangles/Screenshots/two-triangles.png)
