@@ -108,9 +108,15 @@ int main()
 	// ------------
 
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f, // left  
-		0.5f, -0.5f, 0.0f, // right 
-		0.0f,  0.5f, 0.0f  // top   
+		// First triangle
+		0.5f, 0.5f, 0.0f, // top-right
+		0.5f, -0.5f, 0.0f, // bottom-right
+		-0.5f,  0.5f, 0.0f,  // top-left
+
+		// Second triangle
+		0.5f, -0.5f, 0.0f, // bottom-right
+		-0.5f, -0.5f, 0.0f, // bottom-left
+		-0.5f, 0.5f, 0.0f // top-left
 	};
 
 	// Create VBO and VAO
@@ -146,8 +152,7 @@ int main()
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO); // Bind VAO
 
-		// Draw Triangle
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 6); // Last argument = how many vertices we want to draw
 
 		glfwSwapBuffers(window); // Double-buffer technique
 		glfwPollEvents(); // Checks if any events are triggered
