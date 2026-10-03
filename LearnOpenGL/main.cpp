@@ -108,20 +108,25 @@ int main()
 	// ------------
 
 	float vertices[] = {
-		// First triangle
 		-0.9f, -0.5f, 0.0f, // left  
-		0.0f, -0.5f, 0.0f, // right 
+		0.0f, -0.5f, 0.0f, // (Common point)
 		-0.45f,  0.5f, 0.0f, // top
-		// Second triangle
-		0.0f, -0.5f, 0.0f, // left
 		0.9f, -0.5f, 0.0f, // right
 		0.45f, 0.5f, 0.0f, // top
 	};
 
-	// Create VBO and VAO
-	unsigned int VBO, VAO;
+	unsigned int indices[] = {
+		// First triangle
+		0, 1, 2,
+		// Second triangle
+		1, 3, 4
+	};
+
+	// Create VBO, VAO, and EBO
+	unsigned int VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 
 	// VAO - I don't quite understand this yet but it seems to save the state of VBO
 	glBindVertexArray(VAO);
@@ -129,6 +134,9 @@ int main()
 	// VBO - copy float vertices[] data from CPU (RAM) to GPU (VRAM)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// Specifies what part of our input data (float vertices[]) goes to which vertex 
 	// attribute (the one with 'in' keyword) for the vertex shader
@@ -150,9 +158,7 @@ int main()
 
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO); // Bind VAO
-
-		// Draw Triangle
-		glDrawArrays(GL_TRIANGLES, 0, 6); // Last argument = how many vertices to render
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); // 6 = Depends on the no. of indices (EBO)
 
 		glfwSwapBuffers(window); // Double-buffer technique
 		glfwPollEvents(); // Checks if any events are triggered
