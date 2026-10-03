@@ -86,6 +86,24 @@ int main()
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
+	// Each step in the pipeline is depends on the previous step, we have to link them properly
+	unsigned int shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glLinkProgram(shaderProgram);
+
+	// Check for linking errors
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	if (!success)
+	{
+		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+	}
+
+	// Delete the shaders after successfully linking them
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+
 	// Render loop (each iteration is a frame)
 	while (!glfwWindowShouldClose(window))
 	{
