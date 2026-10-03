@@ -159,6 +159,7 @@ int main()
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO); // Bind VAO
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Wireframe mode
 
 		glfwSwapBuffers(window); // Double-buffer technique
 		glfwPollEvents(); // Checks if any events are triggered
