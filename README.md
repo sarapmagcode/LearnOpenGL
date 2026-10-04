@@ -12,12 +12,6 @@ Hopefully, one day, I could also make a game like he did and a lot of people wou
 
 Currently, I'm studying the tutorial here in <https://learnopengl.com/>.
 
-## First Triangle
-
-So much code and graphics concept for a single triangle on the screeen :))
-
-![the most awaited triangle](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/the-most-awaited-triangle.png)
-
 ## Wireframe Mode
 
 ![Wireframe mode](https://github.com/sarapmagcode/LearnOpenGL/blob/element-buffer-objects/Screenshots/wireframe-mode.png)
