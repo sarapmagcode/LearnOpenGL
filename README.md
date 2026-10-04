@@ -31,3 +31,6 @@ There are multiple branches in this repo for the exercises that I partook:
 - [x] [Draw 2 triangles next to each other](https://github.com/sarapmagcode/LearnOpenGL/tree/hello-triangle-exercise-1-draw-2-triangles)
 - [x] [Same 2 triangles but using two different VAOs and VBOs for their data](https://github.com/sarapmagcode/LearnOpenGL/tree/hello-triangle-exercise-2-diff-vao-vbo)
 - [x] [Draw both triangles again where one outputs the color yellow](https://github.com/sarapmagcode/LearnOpenGL/tree/hello-triangle-exercise-3-diff-fragment-shader)
+
+**Shaders**
+- [x] [Upside-down Triangle](https://github.com/sarapmagcode/LearnOpenGL/tree/shaders-exercise-1-triangle-upside-down)
