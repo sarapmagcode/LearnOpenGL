@@ -1,5 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+// C++ cannot open source file
+// Refer to https://stackoverflow.com/questions/42679720/c-cannot-open-source-file
+#include <LearnOpenGl/shader_s.h>
+
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
@@ -7,24 +12,6 @@ void processInput(GLFWwindow *window);
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-
-const char* vertexShaderSource = "#version 330 core\n" // '330' means OpenGL version 3.3 (if we're using 4.2, then it would become '420' instead)
-	"layout (location = 0) in vec3 aPos;\n"
-	"layout (location = 1) in vec3 aColor;\n"
-	"out vec3 ourColor;\n" // output color to fragment shader
-	"void main()\n"
-	"{\n"
-	"	gl_Position = vec4(aPos, 1.0);\n"
-	"	ourColor = aColor;\n" // This is from the vertex input
-	"}\0";
-
-const char* fragmentShaderSource = "#version 330 core\n"
-	"out vec4 FragColor;\n"
-	"in vec3 ourColor;\n"
-	"void main()\n"
-	"{\n"
-	"	FragColor = vec4(ourColor, 1.0);\n"
-	"}\n\0";
 
 int main()
 {
@@ -57,56 +44,9 @@ int main()
 		return -1;
 	}
 
-	// GRAPHICS PIPELINE
-	// -----------------
-	// Shaders - small programs running on the GPU.
-	// Note: There are only specific shaders that are programmable by us (like these below, but not all).
-
-	// 1. Vertex Shader
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-
-	// Compile our shader source to check for errors
-	int success;
-	char infoLog[512];
-	
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	// 2. Fragment Shader
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	// Each step in the pipeline is depends on the previous step, we have to link them properly
-	unsigned int shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	// Check for linking errors
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-	}
-
-	// Delete the shaders after successfully linking them
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	// Let CMake set the "Exclude From Build" option for a single source file in Visual Studio
+	// Refer to https://stackoverflow.com/questions/51780689/let-cmake-set-the-exclude-from-build-option-for-a-single-source-file-in-visual
+	Shader ourShader("3.3.shader.vert", "3.3.shader.frag");
 
 	// VERTEX INPUT
 	// ------------
@@ -141,9 +81,7 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// Be sure to activate the shader first
-		glUseProgram(shaderProgram);
-
+		ourShader.use();
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -154,7 +92,6 @@ int main()
 	// Optional: De-allocate all resources
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-	glDeleteProgram(shaderProgram);
 
 	glfwTerminate();
 	return 0;
