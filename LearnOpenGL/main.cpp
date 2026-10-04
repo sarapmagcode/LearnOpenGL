@@ -10,18 +10,20 @@ const unsigned int SCR_HEIGHT = 600;
 
 const char* vertexShaderSource = "#version 330 core\n" // '330' means OpenGL version 3.3 (if we're using 4.2, then it would become '420' instead)
 	"layout (location = 0) in vec3 aPos;\n"
+	"layout (location = 1) in vec3 aColor;\n"
+	"out vec3 ourColor;\n" // output color to fragment shader
 	"void main()\n"
 	"{\n"
-	"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+	"	gl_Position = vec4(aPos, 1.0);\n"
+	"	ourColor = aColor;\n" // This is from the vertex input
 	"}\0";
 
 const char* fragmentShaderSource = "#version 330 core\n"
 	"out vec4 FragColor;\n"
-	"uniform vec4 ourColor;\n"
+	"in vec3 ourColor;\n"
 	"void main()\n"
 	"{\n"
-	//"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-	"	FragColor = ourColor;\n"
+	"	FragColor = vec4(ourColor, 1.0);\n"
 	"}\n\0";
 
 int main()
@@ -110,31 +112,25 @@ int main()
 	// ------------
 
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f, // left  
-		0.5f, -0.5f, 0.0f, // right 
-		0.0f,  0.5f, 0.0f  // top   
+		// positions		// colors
+		-0.5f, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f, // left  
+		0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f, // right 
+		0.0f,  0.5f, 0.0f,	0.0f, 0.0f, 1.0f // top   
 	};
 
-	// Create VBO and VAO
 	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 
-	// VAO - I don't quite understand this yet but it seems to save the state of VBO
 	glBindVertexArray(VAO);
-	
-	// VBO - copy float vertices[] data from CPU (RAM) to GPU (VRAM)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	// Specifies what part of our input data (float vertices[]) goes to which vertex 
-	// attribute (the one with 'in' keyword) for the vertex shader
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	// Position vertex attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-
-	// Optional: Unbind VBO and VAO
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	// Color vertex attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	// Render loop (each iteration is a frame)
 	while (!glfwWindowShouldClose(window))
@@ -147,12 +143,6 @@ int main()
 
 		// Be sure to activate the shader first
 		glUseProgram(shaderProgram);
-
-		// Update shader uniform
-		float timeValue = glfwGetTime(); // Running time in seconds
-		float greenValue = static_cast<float>(sin(timeValue) / 2.0f + 0.5f);  // Vary the color using the 'sin' function
-		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
