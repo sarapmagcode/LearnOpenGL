@@ -35,3 +35,4 @@ There are multiple branches in this repo for the exercises that I partook:
 **Shaders**
 - [x] [Upside-down Triangle](https://github.com/sarapmagcode/LearnOpenGL/tree/shaders-exercise-1-triangle-upside-down)
 - [x] [Triangle with Horizontal offset using Uniform](https://github.com/sarapmagcode/LearnOpenGL/tree/shaders-exercise-2-horizontal-offset-uniform)
+- [x] [Triangle: Output Vertex Position from Vertex Shader to Fragment Shader](https://github.com/sarapmagcode/LearnOpenGL/tree/shaders-exercise-3-output-vertex-pos-to-fragment)
