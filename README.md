@@ -17,3 +17,13 @@ Currently, I'm studying the tutorial here in <https://learnopengl.com/>.
 So much code and graphics concept for a single triangle on the screeen :))
 
 ![the most awaited triangle](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/the-most-awaited-triangle.png)
+
+## Exercises
+
+There are multiple branches in this repo for the exercises that I partook:
+
+**Hello Triangle**
+
+- [x] [Draw 2 triangles next to each other](https://github.com/sarapmagcode/LearnOpenGL/tree/hello-triangle-exercise-1-draw-2-triangles)
+- [x] [Same 2 triangles but using two different VAOs and VBOs for their data](https://github.com/sarapmagcode/LearnOpenGL/tree/hello-triangle-exercise-2-diff-vao-vbo)
+- [x] [Draw both triangles again where one outputs the color yellow](https://github.com/sarapmagcode/LearnOpenGL/tree/hello-triangle-exercise-3-diff-fragment-shader)
