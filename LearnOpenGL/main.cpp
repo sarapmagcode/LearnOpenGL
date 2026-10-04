@@ -58,6 +58,9 @@ int main()
 		0.0f,  0.5f, 0.0f,	0.0f, 0.0f, 1.0f // top   
 	};
 
+	// The bottom-left is black because of the "positions" values
+	// specifically, the (-0.5f, -0.5f, 0.0f)
+
 	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
