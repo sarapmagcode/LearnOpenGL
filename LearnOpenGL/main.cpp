@@ -10,20 +10,18 @@ const unsigned int SCR_HEIGHT = 600;
 
 const char* vertexShaderSource = "#version 330 core\n" // '330' means OpenGL version 3.3 (if we're using 4.2, then it would become '420' instead)
 	"layout (location = 0) in vec3 aPos;\n"
-	"out vec4 vertexColor;"
 	"void main()\n"
 	"{\n"
 	"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-	"	vertexColor = vec4(0.5, 0.0, 0.0, 1.0);" // Dark red color
 	"}\0";
 
 const char* fragmentShaderSource = "#version 330 core\n"
 	"out vec4 FragColor;\n"
-	"in vec4 vertexColor;" // Same NAME and TYPE from the output of the vertex shader above (otherwise, it won't work)
+	"uniform vec4 ourColor;\n"
 	"void main()\n"
 	"{\n"
-	/*"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"*/
-	"	FragColor = vertexColor;"
+	//"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+	"	FragColor = ourColor;\n"
 	"}\n\0";
 
 int main()
@@ -147,10 +145,16 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		// Be sure to activate the shader first
 		glUseProgram(shaderProgram);
-		glBindVertexArray(VAO); // Bind VAO
 
-		// Draw Triangle
+		// Update shader uniform
+		float timeValue = glfwGetTime(); // Running time in seconds
+		float greenValue = static_cast<float>(sin(timeValue) / 2.0f + 0.5f);  // Vary the color using the 'sin' function
+		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+
+		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glfwSwapBuffers(window); // Double-buffer technique
