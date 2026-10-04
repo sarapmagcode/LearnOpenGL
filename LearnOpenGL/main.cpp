@@ -72,12 +72,6 @@ int main()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	int horizontalOffsetLocation = glGetUniformLocation(ourShader.ID, "horizontalOffset");
-	ourShader.use();
-	// "3f" means after the location, it expects 3 float values (x, y, z) which must be matched in 
-	// our vertex attribute (vec3)
-	glUniform3f(horizontalOffsetLocation, 0.5f, 0.0f, 0.0f);
-
 	// Render loop (each iteration is a frame)
 	while (!glfwWindowShouldClose(window))
 	{
@@ -87,7 +81,10 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		
+		float offset = 0.5f;
+		ourShader.use();
+		ourShader.setFloat("xOffset", offset);
+
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
