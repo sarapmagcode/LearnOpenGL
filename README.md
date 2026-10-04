@@ -18,6 +18,10 @@ So much code and graphics concept for a single triangle on the screeen :))
 
 ![the most awaited triangle](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/the-most-awaited-triangle.png)
 
+## Triangle with Fragment Interpolation
+
+![Triangle with fragment interpolation](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/triangle-with-fragment-interpolation.png)
+
 ## Exercises
 
 There are multiple branches in this repo for the exercises that I partook:
