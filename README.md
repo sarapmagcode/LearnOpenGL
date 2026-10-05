@@ -22,6 +22,10 @@ So much code and graphics concept for a single triangle on the screeen :))
 
 ![Triangle with fragment interpolation](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/triangle-with-fragment-interpolation.png)
 
+## First Texture (Container) Image
+
+![First texture image](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/first-texture-container.png)
+
 ## Exercises
 
 There are multiple branches in this repo for the exercises that I partook:
