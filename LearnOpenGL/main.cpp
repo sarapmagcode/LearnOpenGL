@@ -1,9 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <LearnOpenGL/stb_image.h>
 
 // C++ cannot open source file
 // Refer to https://stackoverflow.com/questions/42679720/c-cannot-open-source-file
-#include <LearnOpenGl/shader_s.h>
+#include <LearnOpenGL/shader_s.h>
 
 #include <iostream>
 
@@ -46,31 +47,102 @@ int main()
 
 	// Let CMake set the "Exclude From Build" option for a single source file in Visual Studio
 	// Refer to https://stackoverflow.com/questions/51780689/let-cmake-set-the-exclude-from-build-option-for-a-single-source-file-in-visual
-	Shader ourShader("3.3.shader.vert", "3.3.shader.frag");
+	Shader ourShader("4.1.texture.vert", "4.1.texture.frag");
 
 	// VERTEX INPUT
 	// ------------
 
 	float vertices[] = {
-		// positions		// colors
-		-0.5f, -0.5f, 0.0f,	1.0f, 0.0f, 0.0f, // left  
-		0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f, // right 
-		0.0f,  0.5f, 0.0f,	0.0f, 0.0f, 1.0f // top   
+		// positions        // colors           // texture coords
+		0.5f,  0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 1.0f, // top right
+		0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f, // bottom right
+		-0.5f, -0.5f, 0.0f,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f, // bottom left
+		-0.5f,  0.5f, 0.0f,	1.0f, 1.0f, 0.0f,	0.0f, 1.0f  // top left 
+	};
+	
+	unsigned int indices[] = {
+		0, 1, 3, // First triangle
+		1, 2, 3 // Second triangle
 	};
 
-	unsigned int VBO, VAO;
+	unsigned int VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 
 	glBindVertexArray(VAO);
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// NOTE (below):
+	// "8 * sizeof(float)" means each vertex (along w/ other attributes connected to it) spans 8 floats 
+	// in our vertices[] array
+
+	// So, basically, in glVertexAttribPointer(), the "pointer" argument is the start of a specific attribute (i.e., vertex, color, texture, etc.)
+	// and then "stride" is how many elements in-between until we reach the next data of the same attribute.
+
 	// Position vertex attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	// -------------------------
+	// "(void*)0" is called pointer. It's the offset of the first component of the first generic vertex attribute
+	// Refer to https://registry.khronos.org/OpenGL-Refpages/gl4/html/glVertexAttribPointer.xhtml
+	// In our scenario, below the the vertices data start at index 0 in vertices[].
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0); // Should match with the corresponding input in the vertex shader (location)
+
 	// Color vertex attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	// ----------------------
+	// "(void*)(3 * sizeof(float)" is the start of color data at index 3 in vertices[]
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+
+	// Texture coord vertex attribute
+	// ------------------------------
+	// "(void*)(6 * sizeof(float))" is the start of texture data at index 6 in vertices[]
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+	// TEXTURE BINDING
+	// ---------------
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture); // All upcoming operations now have effect on our texture object (Basically, bind first before applying)
+
+	// Texture wrapping
+	// ----------------
+	// The equivalent of (x, y, z) in texture coordinates is called (s, t, r) (refer to https://open.gl/textures)
+	// S and T just mean U and V (or X and Y if you prefer), or in GLSL:
+	// vec4.xyzw == vec4.rgba == vec4.strq
+	// Refer to https://gamedev.stackexchange.com/questions/62548/what-does-changing-gl-texture-wrap-s-t-do
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	// Texture filtering parameters (when scaling up or downwards)
+	// "GL_TEXTURE_MIN_FILTER" is the texture minifying function. There are six defined minifiying functions
+	// (i.e., GL_NEAREST, GL_LINEAR, etc.)
+	// Refer to https://registry.khronos.org/OpenGL-Refpages/gl4/html/glTexParameter.xhtml
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Texture magnification function (2 magnification function)
+
+	// Load image, create texture, and generate mipmaps
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		// Once glTexImage2D() is called, the currently bound texture now has the texture image attached to it.
+		glGenerateMipmap(GL_TEXTURE_2D); // Automatically generate all the required mipmaps for the currently bound texture
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+
+	// Free the image memory after
+	stbi_image_free(data);
 
 	// Render loop (each iteration is a frame)
 	while (!glfwWindowShouldClose(window))
@@ -82,8 +154,9 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		ourShader.use();
+		glBindTexture(GL_TEXTURE_2D, texture);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window); // Double-buffer technique
 		glfwPollEvents(); // Checks if any events are triggered
