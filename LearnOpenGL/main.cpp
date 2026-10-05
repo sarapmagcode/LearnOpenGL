@@ -107,9 +107,12 @@ int main()
 
 	// TEXTURE BINDING
 	// ---------------
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture); // All upcoming operations now have effect on our texture object (Basically, bind first before applying)
+	unsigned int texture1, texture2;
+
+	// Texture 1
+	// ---------
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1); // All upcoming operations now have effect on our texture object (Basically, bind first before applying)
 
 	// Texture wrapping
 	// ----------------
@@ -121,14 +124,16 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	// Texture filtering parameters (when scaling up or downwards)
+	// -----------------------------------------------------------
 	// "GL_TEXTURE_MIN_FILTER" is the texture minifying function. There are six defined minifiying functions
 	// (i.e., GL_NEAREST, GL_LINEAR, etc.)
 	// Refer to https://registry.khronos.org/OpenGL-Refpages/gl4/html/glTexParameter.xhtml
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Texture magnification function (2 magnification function)
 
 	// Load image, create texture, and generate mipmaps
 	int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true); // Flip loaded texture on the y-axis
 	unsigned char* data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
 	if (data)
 	{
@@ -143,6 +148,36 @@ int main()
 
 	// Free the image memory after
 	stbi_image_free(data);
+	
+	// Texture 2
+	// ---------
+
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	data = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+
+	stbi_image_free(data);
+
+	ourShader.use(); // Don't forget to activate the shader before setting uniforms
+	// Tell OpenGL which texture unit each shader sampler belongs to
+	glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0); // Set it manually
+	ourShader.setInt("texture2", 1);
 
 	// Render loop (each iteration is a frame)
 	while (!glfwWindowShouldClose(window))
@@ -153,8 +188,15 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		// Bind textures on corresponding texture units
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+		
+		// Render container
 		ourShader.use();
-		glBindTexture(GL_TEXTURE_2D, texture);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -165,6 +207,7 @@ int main()
 	// Optional: De-allocate all resources
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 
 	glfwTerminate();
 	return 0;
