@@ -54,10 +54,10 @@ int main()
 
 	float vertices[] = {
 		// positions        // colors           // texture coords
-		0.5f,  0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 1.0f, // top right
-		0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f, // bottom right
+		0.5f,  0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	2.0f, 2.0f, // top right
+		0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	2.0f, 0.0f, // bottom right
 		-0.5f, -0.5f, 0.0f,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f, // bottom left
-		-0.5f,  0.5f, 0.0f,	1.0f, 1.0f, 0.0f,	0.0f, 1.0f  // top left 
+		-0.5f,  0.5f, 0.0f,	1.0f, 1.0f, 0.0f,	0.0f, 2.0f  // top left 
 	};
 	
 	unsigned int indices[] = {
@@ -120,8 +120,8 @@ int main()
 	// S and T just mean U and V (or X and Y if you prefer), or in GLSL:
 	// vec4.xyzw == vec4.rgba == vec4.strq
 	// Refer to https://gamedev.stackexchange.com/questions/62548/what-does-changing-gl-texture-wrap-s-t-do
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	// Texture filtering parameters (when scaling up or downwards)
 	// -----------------------------------------------------------
