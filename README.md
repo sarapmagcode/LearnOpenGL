@@ -12,19 +12,16 @@ Hopefully, one day, I could also make a game like he did and a lot of people wou
 
 Currently, I'm studying the tutorial here in <https://learnopengl.com/>.
 
-## First Triangle
+## Four Smiley Faces Clamped (Exercise)
 
-So much code and graphics concept for a single triangle on the screeen :))
+![Four smiley faces clamped](https://github.com/sarapmagcode/LearnOpenGL/blob/textures-exercise-2-four-smiley-faces/Screenshots/four-smiley-faces-clamped.png)
 
-![the most awaited triangle](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/the-most-awaited-triangle.png)
+## Texture Wrapping Realization
 
-## Triangle with Fragment Interpolation
+I realized that the final output of the program is the the encircled part at the article,
+specifically, the `GL_CLAMP_TO_EDGE` option:
 
-![Triangle with fragment interpolation](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/triangle-with-fragment-interpolation.png)
-
-## First Texture (Container) Image
-
-![First texture image](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/first-texture-container.png)
+![Texture wrapping realization](https://learnopengl.com/Getting-started/Textures)
 
 ## Exercises
 
