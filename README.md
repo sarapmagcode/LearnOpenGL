@@ -46,3 +46,4 @@ There are multiple branches in this repo for the exercises that I partook:
 - [x] [Only Happy Face is in Reverse Direction](https://github.com/sarapmagcode/LearnOpenGL/tree/textures-exercise-1-happyface-only-reverse)
 - [x] [Four Smiley Faces on a Single Container image clamped at its edge](https://github.com/sarapmagcode/LearnOpenGL/tree/textures-exercise-2-four-smiley-faces)
 - [x] [Display only the Center Pixels of Texture by Changing Texture Coordinates](https://github.com/sarapmagcode/LearnOpenGL/tree/textures-execise-3-only-center-pixels-of-texture-images)
+- [x] [Varying Texture Visibility using Fragment Shader and based on Current Key Pressed](https://github.com/sarapmagcode/LearnOpenGL/tree/textures-exercise-4-vary-texture-visibility)
