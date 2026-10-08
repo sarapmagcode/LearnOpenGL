@@ -1,10 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <LearnOpenGL/stb_image.h>
+#include <stb_image.h>
 
 // C++ cannot open source file
 // Refer to https://stackoverflow.com/questions/42679720/c-cannot-open-source-file
-#include <LearnOpenGL/shader_s.h>
+#include <shader_s.h>
 
 #include <iostream>
 
