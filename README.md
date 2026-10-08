@@ -12,6 +12,12 @@ Hopefully, one day, I could also make a game like he did and a lot of people wou
 
 Currently, I'm studying the tutorial here in <https://learnopengl.com/>.
 
+## Texture Wrapping Realization
+
+I realized in texture wrapping, we're basically "gift wrapping" the primitive that we've built (e.g., triangle, rectangle, etc.) and the 
+smaller the coordinates are, the more the texture is zoomed-in, and the larger the coordinates are, the more the texture is zoomed-out 
+(and repeating textures depending on wrap mode).
+
 ## Varying Texture Visibility based on Key presses (Exercise)
 
 Holding down key:
