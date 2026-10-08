@@ -21,7 +21,7 @@ Currently, I'm studying the tutorial here in <https://learnopengl.com/>.
 I realized that the final output of the program is the the encircled part at the article,
 specifically, the `GL_CLAMP_TO_EDGE` option:
 
-![Texture wrapping realization](https://learnopengl.com/Getting-started/Textures)
+![Texture wrapping realization](https://github.com/sarapmagcode/LearnOpenGL/blob/textures-exercise-2-four-smiley-faces/Screenshots/texture-wrapping-realization.png)
 
 ## Exercises
 
