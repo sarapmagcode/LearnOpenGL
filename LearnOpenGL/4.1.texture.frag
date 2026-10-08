@@ -14,5 +14,5 @@ void main()
 	// Default built-in output variable for fragment shaders, responsible for assigning
 	// the final color to a processed pixel. 
 	// Refer to https://salivity.github.io/glsl/article/why-was-gl-frag-color-deprecated-in-glsl
-	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);
+	FragColor = mix(texture(texture1, TexCoord), texture(texture2, vec2(1.0 - TexCoord.x, TexCoord.y)), 0.2);
 }
