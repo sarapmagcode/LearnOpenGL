@@ -12,19 +12,15 @@ Hopefully, one day, I could also make a game like he did and a lot of people wou
 
 Currently, I'm studying the tutorial here in <https://learnopengl.com/>.
 
-## First Triangle
+## Varying Texture Visibility based on Key presses (Exercise)
 
-So much code and graphics concept for a single triangle on the screeen :))
+Holding down key:
 
-![the most awaited triangle](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/the-most-awaited-triangle.png)
+![Holding down key](https://github.com/sarapmagcode/LearnOpenGL/blob/textures-exercise-4-vary-texture-visibility/Screenshots/hold-down-key.png)
 
-## Triangle with Fragment Interpolation
+Holding up key:
 
-![Triangle with fragment interpolation](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/triangle-with-fragment-interpolation.png)
-
-## First Texture (Container) Image
-
-![First texture image](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/first-texture-container.png)
+![Holding up ket](https://github.com/sarapmagcode/LearnOpenGL/blob/textures-exercise-4-vary-texture-visibility/Screenshots/hold-up-key.png)
 
 ## Exercises
 
