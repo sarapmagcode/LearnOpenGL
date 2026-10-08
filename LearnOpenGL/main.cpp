@@ -53,11 +53,11 @@ int main()
 	// ------------
 
 	float vertices[] = {
-		// positions        // colors           // texture coords
-		0.5f,  0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 1.0f, // top right
-		0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f, // bottom right
-		-0.5f, -0.5f, 0.0f,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f, // bottom left
-		-0.5f,  0.5f, 0.0f,	1.0f, 1.0f, 0.0f,	0.0f, 1.0f  // top left 
+		// positions        // colors           // texture coords ('zoom-in' on our texture image)
+		0.5f,  0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	0.55f, 0.55f, // top right
+		0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	0.55f, 0.45f, // bottom right
+		-0.5f, -0.5f, 0.0f,	0.0f, 0.0f, 1.0f,	0.45f, 0.45f, // bottom left
+		-0.5f,  0.5f, 0.0f,	1.0f, 1.0f, 0.0f,	0.45f, 0.55f  // top left 
 	};
 	
 	unsigned int indices[] = {
@@ -120,16 +120,16 @@ int main()
 	// S and T just mean U and V (or X and Y if you prefer), or in GLSL:
 	// vec4.xyzw == vec4.rgba == vec4.strq
 	// Refer to https://gamedev.stackexchange.com/questions/62548/what-does-changing-gl-texture-wrap-s-t-do
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	// Texture filtering parameters (when scaling up or downwards)
 	// -----------------------------------------------------------
 	// "GL_TEXTURE_MIN_FILTER" is the texture minifying function. There are six defined minifiying functions
 	// (i.e., GL_NEAREST, GL_LINEAR, etc.)
 	// Refer to https://registry.khronos.org/OpenGL-Refpages/gl4/html/glTexParameter.xhtml
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Texture magnification function (2 magnification function)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // Texture magnification function (2 magnification function)
 
 	// Load image, create texture, and generate mipmaps
 	int width, height, nrChannels;
