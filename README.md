@@ -12,19 +12,9 @@ Hopefully, one day, I could also make a game like he did and a lot of people wou
 
 Currently, I'm studying the tutorial here in <https://learnopengl.com/>.
 
-## First Triangle
+## Happy Face in Reverse Direction using Fragment Shader only (Exercise)
 
-So much code and graphics concept for a single triangle on the screeen :))
-
-![the most awaited triangle](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/the-most-awaited-triangle.png)
-
-## Triangle with Fragment Interpolation
-
-![Triangle with fragment interpolation](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/triangle-with-fragment-interpolation.png)
-
-## First Texture (Container) Image
-
-![First texture image](https://github.com/sarapmagcode/LearnOpenGL/blob/dev/Screenshots/first-texture-container.png)
+![Happy face in reverse direction](https://github.com/sarapmagcode/LearnOpenGL/blob/textures-exercise-1-happyface-only-reverse/Screenshots/happyface-reverse-direction.png)
 
 ## Exercises
 
